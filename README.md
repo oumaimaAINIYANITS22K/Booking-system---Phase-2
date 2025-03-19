@@ -29,7 +29,7 @@ As of now, **7 out of 10 hashes have been successfully cracked**:
 ## 🔧 **Methods Used for Cracking**
 
 ### ✅ **1. Fast Wordlist Attack with Hashcat**
-The first approach was using **Hashcat** with the **RockYou** wordlist, which contains common passwords. This method is quick and **finishes in minutes**.
+The first approach was using **Hashcat** with the **RockYou** wordlist, which contains common passwords. This method is quick and **finishes within minutes**.
 
 ```bash
 hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt --force
@@ -60,24 +60,12 @@ For hashes that weren’t cracked using Hashcat, **online MD5 decryption service
 
 ---
 
-### 🚧 **3. The Remaining Uncracked Hashes**
-The last three hashes **could not be cracked** with wordlists or online lookup services.  
-A **hybrid attack** was tested with a **short mask** to check if the passwords were simple.
-
-```bash
-hashcat -m 0 -a 6 hashes.txt /usr/share/wordlists/rockyou.txt ?l?l?l?l?l?l
-```
-⚠ **Problem**: No successful cracks.
-
-Since **full brute-force attacks** estimated **years** to complete, they were **not attempted**.
-
----
-
-## ⏳ **Final Decision: Cracking Was Not Feasible for the Remaining Hashes**
-Since the remaining passwords would take **too long** to crack with brute force, it was concluded that **these hashes are either highly secure or based on uncommon words not in public wordlists**.
+## ⏳ **Final Decision: Remaining Hashes Were Too Strong**
+Since the remaining passwords would take **too long** to crack, it was concluded that **these hashes are either highly secure or based on uncommon words not in public wordlists**.
 
 ### **Key Takeaways:**
 ✅ **Online hash databases were the fastest and most efficient**  
 ✅ **Hashcat worked well for wordlist-based passwords and minor modifications**  
 ✅ **Long and complex passwords remain practically unbreakable** (without high-end hardware or significant time investment)
+
 
