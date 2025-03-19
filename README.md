@@ -1,9 +1,9 @@
 # 📌 MD5 Hash Cracking Progress Report
 
 ## 📝 Overview
-This report documents the step-by-step process of cracking MD5 password hashes using **Hashcat, online decryption services, and wordlist-based attacks**. The objective was to recover plaintext passwords from a set of hashed credentials.
+This report documents the process of cracking MD5 password hashes using **Hashcat with fast wordlist-based attacks and online decryption services**. The objective was to recover plaintext passwords **only using methods that finish in a few minutes**.
 
-Initially, **Hashcat was used with wordlists and brute-force attacks**, but as the process progressed, it became evident that **some hashes required an unreasonable amount of time to crack**—with estimates reaching up to **33 years** in some cases. As a result, **online hash lookup services were used to speed up the process**, leading to multiple successful cracks.
+**Brute-force and long-duration attacks were excluded**, as some estimated cracking times reached **years or even decades**. Instead, the focus remained on **quick wordlist attacks** and **hash lookup services**.
 
 ---
 
@@ -27,23 +27,28 @@ As of now, **7 out of 10 hashes have been successfully cracked**:
 ---
 
 ## 🔧 **Methods Used for Cracking**
-### ✅ **1. Initial Attempts with Hashcat**
-At first, **Hashcat** was used with **common wordlists**, including **RockYou** and **SecLists**:
+
+### ✅ **1. Fast Wordlist Attack with Hashcat**
+The first approach was using **Hashcat** with the **RockYou** wordlist, which contains common passwords. This method is quick and **finishes in minutes**.
+
 ```bash
 hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt --force
 ```
-🎯 **Outcome**: This cracked some passwords, but not all.
+🎯 **Outcome**: Successfully cracked multiple passwords.
 
-To account for **variations in password formats**, a **rule-based attack** was attempted:
+To account for **small variations in passwords**, a **rule-based attack** was used, applying common modifications to words.
+
 ```bash
 hashcat -m 0 -a 0 -r /usr/share/hashcat/rules/best64.rule hashes.txt /usr/share/wordlists/rockyou.txt --force
 ```
-🎯 **Success**: Discovered passwords with minor modifications (e.g., added numbers or symbols).
+🎯 **Success**: Some passwords were found with minor modifications (e.g., numbers or symbols added).
 
 ---
 
-### ✅ **2. Transition to Online Hash Lookup**
-After **Hashcat failed to crack some hashes**, we turned to **online MD5 decryption services**, including:
+### ✅ **2. Online MD5 Lookup Services**
+For hashes that weren’t cracked using Hashcat, **online MD5 decryption services** were used. These services work instantly if the hash is already in their database.
+
+#### **Lookup Sites Used:**
 - **[CrackStation](https://crackstation.net)**
 - **[Hashes.com](https://hashes.com/en/decrypt/hash)**
 - **[MD5Hashing.net](https://md5hashing.net)**
@@ -51,31 +56,28 @@ After **Hashcat failed to crack some hashes**, we turned to **online MD5 decrypt
 - **[MD5 Decrypt](https://md5decrypt.net/)**
 - **[OnlineHashCrack](https://www.onlinehashcrack.com/)**
 
-🎯 **Outcome**: Several passwords were found **instantly** in these databases.
+🎯 **Outcome**: Several passwords were found **instantly**.
 
 ---
 
-### 🚧 **3. The Final Challenge: Remaining Hashes Were Too Strong**
-Three hashes **could not be cracked** using any of the above methods.  
-To test **brute-force feasibility**, a **hybrid attack** was attempted:
+### 🚧 **3. The Remaining Uncracked Hashes**
+The last three hashes **could not be cracked** with wordlists or online lookup services.  
+A **hybrid attack** was tested with a **short mask** to check if the passwords were simple.
+
 ```bash
 hashcat -m 0 -a 6 hashes.txt /usr/share/wordlists/rockyou.txt ?l?l?l?l?l?l
 ```
-⚠ **Problem**: The estimated cracking time was **several years**.
+⚠ **Problem**: No successful cracks.
 
-A **full brute-force** attempt for **14-16 lowercase characters** was also started:
-```bash
-hashcat -m 0 -a 3 hashes.txt ?l?l?l?l?l?l?l?l?l?l?l?l?l?l --force
-```
-⏳ **Time Estimate**: Over **33 years** on standard hardware.  
-📌 **Conclusion**: Not practical to complete.
+Since **full brute-force attacks** estimated **years** to complete, they were **not attempted**.
 
 ---
 
-## ⏳ **Final Decision: Cracking Was Not Feasible**
-Since the remaining passwords would take **decades** to crack with brute force, it was concluded that **these hashes are either highly secure, or based on long, uncommon words that aren’t in any public wordlist**.
+## ⏳ **Final Decision: Cracking Was Not Feasible for the Remaining Hashes**
+Since the remaining passwords would take **too long** to crack with brute force, it was concluded that **these hashes are either highly secure or based on uncommon words not in public wordlists**.
 
 ### **Key Takeaways:**
 ✅ **Online hash databases were the fastest and most efficient**  
 ✅ **Hashcat worked well for wordlist-based passwords and minor modifications**  
-✅ **Long and complex passwords remain practically unbreakable** (without high-end hardware or significant time investment)  
+✅ **Long and complex passwords remain practically unbreakable** (without high-end hardware or significant time investment)
+
