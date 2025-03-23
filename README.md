@@ -68,4 +68,70 @@ Since the remaining passwords would take **too long** to crack, it was concluded
 ✅ **Hashcat worked well for wordlist-based passwords and minor modifications**  
 ✅ **Long and complex passwords remain practically unbreakable** (without high-end hardware or significant time investment)
 
+## 🧩 Update: Cracking the Final 3 Hashes
+
+After exhausting RockYou-based attacks and online lookup services, the last 3 hashes required more **targeted strategies** that still respected the short time constraint. The approach focused on using **custom wordlists**, **rule-based mutations**, and **combinator attacks**, all of which are efficient and practical in real-world scenarios.
+
+---
+
+### 🔐 1. `12c9cef0bfb6b91c42b363b4cf02d8bb` → `deduction221B`
+
+- **Email clue**: `elementary@221bbaker.uk` strongly hinted at Sherlock Holmes.
+- A targeted **custom wordlist** was created with terms like `sherlock`, `221B`, `watson`, `elementary`, and `deduction`.
+- Then a **rule-based attack** was launched using Hashcat to apply intelligent mutations like appending digits and capitalizing letters.
+
+```bash
+hashcat -m 0 -a 0 -r /usr/share/hashcat/rules/best64.rule hashes.txt custom.txt --force
+```
+
+✅ **Result**: `deduction221B` was recovered using simple rule mutations on the word "deduction".
+
+---
+
+### 🦆 2. `ea261222d4867b3ebdfadbe2b35e19d5` → `mickeyisjealous`
+
+- **Email clue**: `quackattack@duckburg.org` pointed to Disney’s DuckTales.
+- A custom wordlist was created with terms like `mickey`, `donald`, `jealous`, `duck`, and `quackattack`.
+- A **combinator attack** was used to join word pairs from the list to mimic user-created phrases.
+
+```bash
+combinator custom.txt custom.txt > combo.txt
+hashcat -m 0 -a 0 hashes.txt combo.txt --force
+```
+
+✅ **Result**: `mickeyisjealous` was found by combining two relevant words.
+
+---
+
+### 🐾 3. `ad17fbd845000b11678ccbf94e135b56` → `snacks4scooby`
+
+- **Email clue**: `ruhroh@mysterymachine.com` is clearly from Scooby-Doo.
+- A small custom list was built: `scooby`, `shaggy`, `snacks`, `scoobysnack`, `mystery`, etc.
+- First, rule-based mutations were attempted:
+
+```bash
+hashcat -m 0 -a 0 -r /usr/share/hashcat/rules/best64.rule hashes.txt custom.txt --force
+```
+
+- Then combinator logic was used to test combinations like `snacks4scooby`:
+
+```bash
+combinator custom.txt custom.txt > combo.txt
+hashcat -m 0 -a 0 hashes.txt combo.txt --force
+```
+
+✅ **Result**: `snacks4scooby` was cracked using this hybrid approach.
+
+---
+
+### 🧠 Summary
+
+These final passwords required:
+- **Small, targeted wordlists** based on contextual analysis of the email/usernames.
+- Use of **rule-based attacks** to mutate base words (e.g., add numbers, modify case).
+- Use of **combinator attacks** to merge keyword pairs.
+- All methods completed in **under a few minutes** with no brute-force involved.
+
+🎯 This highlights how real-world cracking often relies on smart guesswork and efficient use of existing tools rather than raw compute power.
+
 
